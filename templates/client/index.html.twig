@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+
+{% block header %}
+<header class="sticky top-0 left-0 right-0 z-10">
+    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+        <div class="flex items-center justify-end">
+            <button
+                class="flex items-center border-2 border-solid bg-gray-900 border-black text-gray-900 p-2 rounded-md transition duration-300 hover:bg-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-log-out mr-2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" x2="9" y1="12" y2="12" />
+                </svg>
+                <span class="hidden text-gray-900 text-lg font-semibold transition-opacity duration-300 hover:block">
+                    Deconnexion
+                </span>
+            </button>
+
+    </nav>
+</header>
+{% endblock %}
+
+{% block body %}
+<!-- Sidebar Toggle Button -->
+
+
+
+<main class="p-4 sm:ml-64 h-screen overflow-hidden">
+
+    <div class="flex flex-row justify-between items-center  mb-8">
+        <div class="w-full flex flex-row items-center justify-center">
+            <form class="flex items-center w-1/2 mx-auto" action="{{path('client.search')}}">
+                <div class="relative w-full">
+                    <input type="text" id="simple-search" name="search" value="{{ search is defined ? search : '' }}"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Telephone..." required />
+                </div>
+
+                <button type="submit"
+                    class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                    <span class="sr-only">Search</span>
+                </button>
+            </form>
+
+            <form class="w-auto" action="{{path('client.search')}}">
+                <select id="countries" name="filter" onchange="this.form.submit()"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                    <option selected hidden>Filtrer par</option>
+                    <option value="true">Client avec un compte</option>
+                    <option value="false">Client sans compte</option>
+                </select>
+            </form>
+        </div>
+
+
+        <div class="w-full  flex items-center justify-end">
+            <button
+                class="flex items-center px-5 py-3    bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                <a href="{{ path('client.store') }}">Ajouter</a>
+            </button>
+        </div>
+    </div>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase  dark:bg-gray-700 dark:text-gray-400  bg-gray-900">
+                <tr>
+
+                    <th scope="col" class="px-6 py-5 text-white">
+                        Surnom
+                    </th>
+                    <th scope="col" class="px-6 py-5 text-white">
+                        Telephone
+                    </th>
+                    <th scope="col" class="px-6 py-5 text-white">
+                        Adresse
+                    </th>
+                    <th scope="col" class="px-6 py-5 text-white">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if pagination.items is not empty %}
+
+                {% for client in pagination.items %}
+                <tr
+                    class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ client.surname }}
+                    </td>
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ client.telephone }}
+                    </td>
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ client.adresse}}
+                    </td>
+                    <td class="px-6 py-4 flex flex-row space-x-3">
+                        <svg data-client-id="{{ client.id }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="#d20f0f" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="icon">
+
+                            <path d="M3 6h18" />
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            <line x1="10" x2="10" y1="11" y2="17" />
+                            <line x1="14" x2="14" y1="11" y2="17" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="#3e3232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="edit">
+                            <path
+                                d="m18 5-2.414-2.414A2 2 0 0 0 14.172 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2" />
+                            <path
+                                d="M21.378 12.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+                            <path d="M8 18h1" />
+                        </svg>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                {% else %}
+                <tr
+                    class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Aucun client
+                    </td>
+                </tr>
+                {% endif %}
+
+            </tbody>
+        </table>
+
+    </div>
+    <div class="mt-5 flex justify-end">
+        {{ knp_pagination_render(pagination,'pagination.html.twig') }}
+    </div>
+
+
+</main>
+{% endblock %}

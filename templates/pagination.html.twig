@@ -1,0 +1,48 @@
+{% if pageCount is defined and pageCount > 1 %}
+    <ul class="pagination flex space-x-3 flex-row">
+
+        {# Bouton Précédent #}
+        {% if current > 1 %}
+            <li>
+                <a href="{{ path(route, query|merge({(pageParameterName): current - 1})) }}" 
+                   class="bg-blue-600 text-white hover:bg-blue-700 p-2 rounded-md transition duration-150 ease-in-out">
+                    Précédent
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <span class="bg-gray-100 text-gray-400 p-2 rounded-md cursor-not-allowed">Précédent</span>
+            </li>
+        {% endif %}
+
+        {# Numéros de page #}
+        {% for page in pagesInRange %}
+            <li>
+                {% if page == current %}
+                    <span class="bg-blue-600 text-white p-2 rounded-md">{{ page }}</span>
+                {% else %}
+                    <a href="{{ path(route, query|merge({(pageParameterName): page})) }}" 
+                       class="bg-gray-200 text-gray-700 hover:bg-gray-300 p-2 rounded-md transition duration-150 ease-in-out">
+                        {{ page }}
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+
+        {# Bouton Suivant #}
+        {% if current < last %}
+            <li>
+                <a href="{{ path(route, query|merge({(pageParameterName): current + 1})) }}" 
+                   class="bg-blue-600 text-white hover:bg-blue-700 p-2 rounded-md transition duration-150 ease-in-out">
+                    Suivant
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <span class="bg-gray-100 text-gray-400 p-2 rounded-md cursor-not-allowed">Suivant</span>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}
+
+

@@ -1,0 +1,63 @@
+{# templates/client/form.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block header %}
+<header class="sticky top-0 left-0 right-0 z-10">
+    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+        <div class="flex items-center justify-end">
+            <button
+                class="flex items-center border-2 border-solid bg-gray-900 border-black text-gray-900 p-2 rounded-md transition duration-300 hover:bg-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-log-out mr-2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" x2="9" y1="12" y2="12" />
+                </svg>
+                <span class="hidden text-gray-900 text-lg font-semibold transition-opacity duration-300 hover:block">
+                    Deconnexion
+                </span>
+            </button>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
+{% block body %}
+<main class="p-4 sm:ml-64 h-auto overflow-hidden">
+    <div class="flex flex-col justify-center items-center">
+        <h1 class="text-3xl font-bold">Ajout Client</h1>
+        <div class="md:w-800 sm:w-xgg mx-auto p-6 border-t-black shadow-md border-2 rounded-md m-6">
+            {{ form_start(formClient , { 'attr': {'id': 'clientForm'} }) }}
+            {{ form_row(formClient.telephone,{ 'attr': {'id': 'telephone' } }) }}
+            {{ form_row(formClient.surname, { 'attr': {'id': 'surname'} } )}}
+            {{ form_row(formClient.adresse, { 'attr': {'id': 'adresse'} }) }}
+
+            <label class="switch">
+                <input type="checkbox" id="toggleSwitch" name="toggleSwitch" {% if app.request.get('toggleSwitch')=='on'
+                    %} checked {% endif %}>
+                <span class="slider"></span>
+            </label>
+            <div id="toggleDiv" class="hidden">
+
+                {{ form_row(formUser.nom) }}
+                {{ form_row(formUser.prenom) }}
+                {{ form_row(formUser.login) }}
+                {{ form_row(formUser.password) }}
+
+            </div>
+
+            <div class="mt-4 text-center flex flex-row space-x-2 justify-end">
+
+                {{ form_row(formClient.cancel, { 'attr': {'class': 'bg-red-500 hover:bg-red-700 text-white font-bold
+                py-2 px-4 rounded ml-2'} }) }}
+                {{ form_row(formClient.save, { 'attr': {'class': 'bg-blue-500 hover:bg-blue-700 text-white font-bold
+                py-2 px-4 rounded'} }) }}
+            </div>
+            {{ form_end(formClient) }}
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}
