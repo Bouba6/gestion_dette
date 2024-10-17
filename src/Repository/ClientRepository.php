@@ -6,6 +6,7 @@ use App\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @extends ServiceEntityRepository<Client>
  */
@@ -40,4 +41,37 @@ class ClientRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function  searchByTelephoneAndName(String $search): array
+    {
+       
+        return $this->createQueryBuilder('c')
+        ->where('c.surname LIKE :search')
+        ->orWhere('c.telephone LIKE :search')
+        ->setParameter('search', '%' . $search . '%')
+        ->getQuery()->getResult();
+    }
+
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->getQuery()->getResult();
+    }
+
+    public function findAccountentClient($filter): array
+    {
+        if($filter ==='true'){
+            return $this->createQueryBuilder('c')
+            ->where('c.users IS NOT NULL')
+            ->getQuery()->getResult();
+        }
+        else{
+            return $this->createQueryBuilder('c')
+            ->where('c.users IS NULL')
+            ->getQuery()->getResult();  
+        }
+    }
+
+  
+
 }

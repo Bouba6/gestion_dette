@@ -27,7 +27,14 @@
 <main class="p-4 sm:ml-64 h-auto overflow-hidden">
     <div class="flex flex-col justify-center items-center">
         <h1 class="text-3xl font-bold">Ajout Client</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-user">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+        </svg>
         <div class="md:w-800 sm:w-xgg mx-auto p-6 border-t-black shadow-md border-2 rounded-md m-6">
+
             {{ form_start(formClient , { 'attr': {'id': 'clientForm'} }) }}
             {{ form_row(formClient.telephone,{ 'attr': {'id': 'telephone' } }) }}
             {{ form_row(formClient.surname, { 'attr': {'id': 'surname'} } )}}
@@ -39,6 +46,18 @@
                 <span class="slider"></span>
             </label>
             <div id="toggleDiv" class="hidden">
+                <div
+                    class="bg-gradient-to-r from-blue-500 to-purple-600  max-h-60 p-6 shadow-lg rounded-lg transform hover:scale-105 transition duration-300 ease-in-out h-auto w-full flex flex-row items-center mt-3 mb-3 space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                        stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-users">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <p class="text-xl">Ajouter un compte utilisateur</p>
+                </div>
 
                 {{ form_row(formUser.nom) }}
                 {{ form_row(formUser.prenom) }}
@@ -47,7 +66,9 @@
 
             </div>
 
+
             <div class="mt-4 text-center flex flex-row space-x-2 justify-end">
+
 
                 {{ form_row(formClient.cancel, { 'attr': {'class': 'bg-red-500 hover:bg-red-700 text-white font-bold
                 py-2 px-4 rounded ml-2'} }) }}

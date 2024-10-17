@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Dette;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Client;
 
 /**
  * @extends ServiceEntityRepository<Dette>
@@ -40,4 +41,30 @@ class DetteRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function searchDetteForClient(Client $client): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.client = :client')
+            ->setParameter('client', $client)
+            ->getQuery()->getResult();
+    }
+
+    public function listerDetteByFilter($filter ,Client $client): array
+    {
+        if ($filter==='true') {
+            return $this->createQueryBuilder('d')
+                ->where('d.client = :client')
+                ->andWhere('d.montant - d.montantVerser = 0')
+                ->setParameter('client', $client)
+                ->getQuery()->getResult();
+        } else {
+            return $this->createQueryBuilder('d')
+                ->where('d.client = :client')
+                ->andWhere('d.montant - d.montantVerser > 0')
+                ->setParameter('client', $client)
+                ->getQuery()->getResult();
+        }
+    }
 }

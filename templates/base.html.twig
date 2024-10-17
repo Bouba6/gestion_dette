@@ -7,7 +7,13 @@
     <title>{% block title %}Welcome to Meww Shop !{% endblock %}</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    <link rel="stylesheet" href="{{ asset('build/assets_styles_app_css.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
     {% block stylesheets %}
     {{ encore_entry_link_tags('styles') }}
     {% endblock %}
@@ -91,40 +97,52 @@
                     <li>
                         <a href="{{ path('client.index') }}"
                             class="flex items-center p-2 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
-                            <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                viewBox="0 0 18 20">
-                                <path
-                                    d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-list">
+                                <path d="M3 12h.01" />
+                                <path d="M3 18h.01" />
+                                <path d="M3 6h.01" />
+                                <path d="M8 12h13" />
+                                <path d="M8 18h13" />
+                                <path d="M8 6h13" />
                             </svg>
-                            <span class="flex-1 ms-3 text-xl whitespace-nowrap">Products</span>
+                            <span class="flex-1 ms-3 text-xl whitespace-nowrap">Clients</span>
                         </a>
                     </li>
                     <li>
                         <a href="#"
                             class="flex items-center p-2 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
-                            <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-list">
+                                <path d="M3 12h.01" />
+                                <path d="M3 18h.01" />
+                                <path d="M3 6h.01" />
+                                <path d="M8 12h13" />
+                                <path d="M8 18h13" />
+                                <path d="M8 6h13" />
                             </svg>
-                            <span class="flex-1 ms-3 text-xl whitespace-nowrap">Sign In</span>
+                            <span class="flex-1 ms-3 text-xl whitespace-nowrap">Articles</span>
                         </a>
                     </li>
                     <li>
                         <a href="#"
                             class="flex items-center p-2 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
-                            <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z" />
-                                <path
-                                    d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.049-1.048c-.285.224-.592.431-.903.593l-6.117 6.116A4.839 4.839 0 0 1 2.141 20H2a1.97 1.97 0 0 0-2-1.933V8.333h4.933A2 2 0 0 1 6.737 11.06Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-list">
+                                <path d="M3 12h.01" />
+                                <path d="M3 18h.01" />
+                                <path d="M3 6h.01" />
+                                <path d="M8 12h13" />
+                                <path d="M8 18h13" />
+                                <path d="M8 6h13" />
                             </svg>
-                            <span class="flex-1 ms-3 text-xl whitespace-nowrap">About Us</span>
+                            <span class="flex-1 ms-3 text-xl whitespace-nowrap">Dette</span>
                         </a>
                     </li>
+
                 </div>
             </ul>
         </div>
@@ -133,20 +151,84 @@
     <header class="sticky top-0 left-0 right-0 z-10">
         <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
             <div class="flex items-center justify-end">
-                <button
-                    class="flex items-center border-2 border-solid bg-gray-900 border-black text-gray-900 p-2 rounded-md transition duration-300 hover:bg-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-log-out mr-2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" x2="9" y1="12" y2="12" />
-                    </svg>
-                    <span
-                        class="hidden text-gray-900 text-lg font-semibold transition-opacity duration-300 hover:block">
-                        Deconnexion
-                    </span>
-                </button>
+                <div class=" flex justify-center items-center">
+                    <div x-data="{ open: false }" class="w-32 flex justify-center items-center">
+                        <div @click="open = !open" class="relative border-b-4 border-transparent py-3"
+                            :class="{'border-indigo-700 transform transition duration-300 ': open}"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100">
+                            <div class="flex justify-center shadow-sm  items-center space-x-3 cursor-pointer">
+                                <div class="w-9 h-9 rounded-full overflow-hidden  dark:border-white ">
+                                    <img src="{{ asset('img/homme.png') }}" alt="" class="w-full h-full object-cover">
+                                </div>
+                                <div class="font-semibold dark:text-white -space-x-2 text-gray-900 ">
+                                    <div class="cursor-pointer">
+                                        <span class="text-xl ">NampMeew </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95"
+                                class="absolute w-40 px-5 py-3 dark:bg-gray-800 bg-red-200  rounded-lg shadow border right-0 dark:border-transparent mt-5">
+                                <ul class="space-y-3 dark:text-white">
+                                    <li class="font-medium">
+                                        <a href="#"
+                                            class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-indigo-700">
+                                            <div class="mr-3">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            Account
+                                        </a>
+                                    </li>
+                                    <li class="font-medium">
+                                        <a href="#"
+                                            class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-indigo-700">
+                                            <div class="mr-3">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                    </path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                            </div>
+                                            Setting
+                                        </a>
+                                    </li>
+                                    <hr class="dark:border-gray-700">
+                                    <li class="font-medium">
+                                        <a href="#"
+                                            class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-red-600">
+                                            <div class="mr-3 text-red-600">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            Logout
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
         </nav>
     </header>

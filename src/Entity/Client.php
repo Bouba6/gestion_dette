@@ -47,12 +47,15 @@ class Client
     /**
      * @var Collection<int, Dette>
      */
-    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $dettes;
 
     public function __construct()
     {
         $this->dettes = new ArrayCollection();
+        $this->createAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
+
     }
 
     public function getId(): ?int

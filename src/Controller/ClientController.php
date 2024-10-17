@@ -11,10 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Post;
 use Symfony\Component\HttpFoundation\Get;
 use App\Repository\ClientRepository;
+use App\Repository\DetteRepository;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+
+
+use App\Entity\Dette;
 use App\Entity\Client;
 use App\Form\ClientType;
+use App\Form\DetteType;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -95,9 +100,8 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
                     'formClient' => $formClient->createView(),
                     'formUser' => $formUser->createView(),
                 ]);
-}
 
-    
+}
 
 
         #[Route('/client/search', name: 'client.search', methods: ['GET'])]
@@ -108,22 +112,23 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             $clientSearchDTO = new ClientDTO($searchTerm); // Passer le terme de recherche dans le DTO
             
             // Construire le QueryBuilder pour la recherche
-            $queryBuilder = $clientRepository->createQueryBuilder('c');
+          
     
             // Vérifier si le terme de recherche est fourni
             if (!empty($clientSearchDTO->getSearch())) {
-                $queryBuilder
-                    ->where('c.surname LIKE :search')
-                    ->orWhere('c.telephone LIKE :search')
+                $array=$clientRepository->searchByTelephoneAndName($clientSearchDTO->getSearch());
+            }
 
-                    ->setParameter('search', '%' . $clientSearchDTO->getSearch() . '%');
+            if($request->get('filter') !==null){
+                // ($request->get('filter'));
+                $array=$clientRepository->findAccountentClient($request->get('filter'));
             }
     
             // Pagination
             $pagination = $paginator->paginate(
-                $queryBuilder,
+                $array,
                 $request->query->getInt('page', 1),
-                6 // Nombre d'éléments par page
+                4 // Nombre d'éléments par page
             );
     
             return $this->render('client/index.html.twig', [
@@ -131,28 +136,76 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
                 'search' => $clientSearchDTO->getSearch(), // Passer la valeur de recherche à la vue
             ]);
         }
+        
+
+        #[Route('/client/ajout/{id}', name:'client.ajout.form', methods: ['POST','GET'])]
+        public function ajout(DetteRepository $detteRepository,ClientRepository $clientRepository, EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
+        {
+            $dette=new Dette();
+            $clientId=$request->get('id');
+            $formDette = $this->createForm(DetteType::class, $dette);
+            $dette->setclient($clientRepository->find($clientId));
+            $formDette->handleRequest($request);
+            if($formDette->isSubmitted() && $formDette->isValid()){
+                $dette->setMontantVerser(0);
+                $entityManager->persist($dette);
+                $entityManager->flush();
+                return $this->redirectToRoute('client.dette', ['id' => $clientId]);
+            }
+
+            return $this->render('dette/form.html.twig', [
+                'formDette' => $formDette->createView(),
+               
+            ]);
+
+           
+        }
+       
 
 
        #[Route('/client/delete/{id}', name: 'client_delete', methods: ['POST'])]
        public function delete(Client $client, EntityManagerInterface $entityManager): Response
        {
-        
+
            $entityManager->remove($client);
            $entityManager->flush();
    
            return $this->json(['message' => 'Client supprimé avec succès'], Response::HTTP_OK);
        }
+
+       #[Route('/client/dette/{id?}', name: 'client.dette', methods: ['GET'])]
+       public function dette(DetteRepository $detteRepository,ClientRepository $clientRepository, EntityManagerInterface $entityManager, int|null $id=null, Request $request, PaginatorInterface $paginator): Response
+       {
+            if($request->get('filter') !==null){
+                $clientId = $request->get('client');
+                $client = $clientRepository->find($clientId);
+                $array = $detteRepository->listerDetteByFilter($request->get('filter'), $client);
+                
+        
+            }
+            else{
+                $client = $clientRepository->find($id);
+                $array=$detteRepository->searchDetteForClient($client);
+            }
+           
+            $pagination=$paginator->paginate(
+              $array,
+              $request->query->getInt('page', 1),
+              4
+            );
+            
+            return $this->render('dette/index.html.twig', [
+                'pagination' => $pagination,
+                'client' => $client
+            ]) ;
+
+        }
+
+
+        
    
 
 
 
-        
-    
-
-    
-    
-
-
 
 }
-

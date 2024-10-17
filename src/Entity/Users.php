@@ -5,17 +5,18 @@ namespace App\Entity;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+class Users implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 100)]
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
     private ?string $nom = null;
 
@@ -27,7 +28,7 @@ class Users
     #[Assert\NotBlank(message: "Le login ne peut pas être vide.")]
     private ?string $login = null;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(length: 100)]
     #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
     private ?string $password = null;
 
@@ -42,6 +43,16 @@ class Users
 
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
     private ?Client $client = null;
+
+
+
+
+    public function __construct()
+    {
+        $this->createAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
+        $this->isBlocked = false;
+    }
 
     public function getId(): ?int
     {
