@@ -110,8 +110,6 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             // Récupérer le terme de recherche
             $searchTerm = $request->query->get('search', '');
             $clientSearchDTO = new ClientDTO($searchTerm); // Passer le terme de recherche dans le DTO
-            
-            // Construire le QueryBuilder pour la recherche
           
     
             // Vérifier si le terme de recherche est fourni
@@ -179,7 +177,12 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             if($request->get('filter') !==null){
                 $clientId = $request->get('client');
                 $client = $clientRepository->find($clientId);
-                $array = $detteRepository->listerDetteByFilter($request->get('filter'), $client);
+                $formsearch = $this->createForm(DetteSearchCheckboxType::class);
+                $formsearch->handleRequest($request);
+                if($formsearch->isSubmitted()){
+                    $array=$detteRepository->listerDetteByFilter($formsearch->get('detteStatus')->getData(), $client);
+                }
+                // $array = $detteRepository->listerDetteByFilter($request->get('filter'), $client);
                 
         
             }
@@ -196,7 +199,8 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             
             return $this->render('dette/index.html.twig', [
                 'pagination' => $pagination,
-                'client' => $client
+                'client' => $client,
+                'formsearch' => $formsearch->createView(),
             ]) ;
 
         }

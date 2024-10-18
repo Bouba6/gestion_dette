@@ -32,6 +32,13 @@ class SearchClientType extends AbstractType
         )     
         ]
     ]
+    ->add('surname', TextType::class, [
+        'required' => false, 
+        'label' => 'Surname',
+        'attr' => [
+            
+        ]])
+
     ->add('search', SubmitType::class,[
         'attr' => [
             'class'=> 'mt-1 mb-4 block w-full px-4 py-2 font-weight-bold  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
@@ -43,7 +50,7 @@ class SearchClientType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'data_class' => ClientDTO::class,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\DTO;
 
 class ClientDTO
 {
+    
     private int $id;
     private ?string $surname;
     private ?string $telephone;

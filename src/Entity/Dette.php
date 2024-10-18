@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\DetteRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use App\Enum\DetteStatus;
+
+
 #[ORM\Entity(repositoryClass: DetteRepository::class)]
 class Dette
 {
@@ -30,10 +33,24 @@ class Dette
     private ?Client $client = null;
 
 
+    public DetteStatus $detteStatus;
+
+
     public function __construct()
     {
         $this->createAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
+      
+    }
+
+    public function getDetteStatus(): DetteStatus
+    {
+        if($this->montant == $this->montantVerser){
+            return DetteStatus::Paye;
+        }
+        else{
+            return DetteStatus::Impayee;
+        }
     }
 
     public function getId(): ?int
