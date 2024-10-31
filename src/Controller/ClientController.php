@@ -8,11 +8,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Post;
 use Symfony\Component\HttpFoundation\Get;
 use App\Repository\ClientRepository;
 use App\Repository\DetteRepository;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 
 
@@ -47,60 +55,79 @@ class ClientController extends AbstractController
             'pagination' => $pagination
         ]);
     }
+   
 
    #[Route('/client/store', name: 'client.store', methods: ['POST', 'GET'])]
-public function store(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
-            {
-                $client = new Client();
-                $users = new Users();
-                
-                $formClient = $this->createForm(ClientType::class, $client);
-                $formUser = $this->createForm(UserType::class, $users);
-                
-                $formClient->handleRequest($request);
-                // dd($formClient);
-                if ($formClient->isSubmitted() && $formClient->isValid()) {
-                    
-                    $client->setCreateAt(new \DateTimeImmutable());
-                    $client->setUpdateAt(new \DateTimeImmutable());
-
-                    
-                    if ($request->get('toggleSwitch') === 'on') {
-                        $formUser->handleRequest($request);
-                        $users->setCreateAt(new \DateTimeImmutable());
-                        $users->setUpdateAt(new \DateTimeImmutable());
-                        $users->setBlocked(false);
-                        
-                       
-                        // Persist the user and associate with the client
-                        $entityManager->persist($users);
-                        $client->setUsers($users); 
-                     
-                        // Optionally, you could add an else case to handle invalid user form submission if needed.
-                    }
-                    // Persist the client
-                    $errors = $validator->validate($client);
-                    if (count($errors) > 0) {
-                        foreach ($errors as $error) {
-                            $this->addFlash('error', $error->getMessage());
-                        }
-                        return $this->render('client/form.html.twig', [
-                            'formClient' => $formClient->createView(),
-                            'formUser' => $formUser->createView(),
-                        ]);
-                    }
-                    $entityManager->persist($client);
-                    $entityManager->flush();
-
-                    return $this->redirectToRoute('client.index');
-                }
-
-                // Render the form view
+   public function store(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/brochures')] string $brochuresDirectory): Response
+{
+    $client = new Client();
+    $users=new Users();
+    
+    // Créez le formulaire ClientType (qui inclut maintenant UserType)
+    $formClient = $this->createForm(ClientType::class, $client, ['mailer' => $mailer]);
+    
+    // Traitez le formulaire
+    $formClient->handleRequest($request);
+   
+    if ($formClient->isSubmitted() && $formClient->isValid()) {
+        // Gérer les champs du formulaire Client
+        $client->setCreateAt(new \DateTimeImmutable());
+        $client->setUpdateAt(new \DateTimeImmutable());
+       
+        if($request->request->get('toggleSwitch')==='on'){
+            // $password=$client->getUsers()->getPassword()
+            $users=$client->getUsers();
+           
+            $users->setCreateAt(new \DateTimeImmutable());
+            $users->setUpdateAt(new \DateTimeImmutable());
+            $users->setBlocked(false);
+            $errors=$validator->validate($users);
+            // dd($errors);
+            if (count($errors) > 0) {
                 return $this->render('client/form.html.twig', [
                     'formClient' => $formClient->createView(),
-                    'formUser' => $formUser->createView(),
+                    'error'=>$errors,
+                    
                 ]);
+    
+            }
+            $entityManager->persist($users);
+           
+            $client->setUsers($users);
+          
+            $client->getUsers()->setPassword($passwordHasher->hashPassword($client->getUsers(), $client->getUsers()->getPassword()));
+        }
+        else{
+            $client->setUsers(null);
+        }
+    
+        // Valider l'entité Client
+        $errors = $validator->validate($client);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
 
+            return $this->render('client/form.html.twig', [
+                'formClient' => $formClient->createView(),
+            ]);
+
+        }
+        
+
+        // Hachage du mot de passe et persist
+        
+        $entityManager->persist($client);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('client.index');
+    }
+
+    // Rendu du formulaire
+    return $this->render('client/form.html.twig', [
+        'formClient' => $formClient->createView(),
+        
+    ]);
 }
 
 
@@ -110,6 +137,8 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             // Récupérer le terme de recherche
             $searchTerm = $request->query->get('search', '');
             $clientSearchDTO = new ClientDTO($searchTerm); // Passer le terme de recherche dans le DTO
+            
+            // Construire le QueryBuilder pour la recherche
           
     
             // Vérifier si le terme de recherche est fourni
@@ -177,12 +206,7 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             if($request->get('filter') !==null){
                 $clientId = $request->get('client');
                 $client = $clientRepository->find($clientId);
-                $formsearch = $this->createForm(DetteSearchCheckboxType::class);
-                $formsearch->handleRequest($request);
-                if($formsearch->isSubmitted()){
-                    $array=$detteRepository->listerDetteByFilter($formsearch->get('detteStatus')->getData(), $client);
-                }
-                // $array = $detteRepository->listerDetteByFilter($request->get('filter'), $client);
+                $array = $detteRepository->listerDetteByFilter($request->get('filter'), $client);
                 
         
             }
@@ -199,8 +223,7 @@ public function store(Request $request, EntityManagerInterface $entityManager, V
             
             return $this->render('dette/index.html.twig', [
                 'pagination' => $pagination,
-                'client' => $client,
-                'formsearch' => $formsearch->createView(),
+                'client' => $client
             ]) ;
 
         }

@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    brochures_directory: '%kernel.project_dir%/public/uploads/brochures'
 
 services:
     # default configuration for services in *this* file
@@ -20,5 +21,16 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Corrected indentation for ClientSubscriber
+    App\EventSubscriber\ClientSubscriber:
+        arguments:
+            $mailer: '@mailer' # Si vous utilisez des arguments
+        public: true
+        tags:
+          - { name: 'Kernel.event_subscriber' } # Utilisez event_subscriber ici, pas event_listener
+            # - { name: 'kernel.event_subscriber' } # Ceci est généralement automatique avec autoconfigure
+
+    App\EventSubscriber\ClientSubscriber1Subscriber:
+      
+        tags:
+             - { name: 'Kernel.event_subscriber' }

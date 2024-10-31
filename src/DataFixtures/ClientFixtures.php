@@ -29,6 +29,7 @@ class ClientFixtures extends Fixture
                 $users = new Users();
                 $users->setNom('nom'.$i);
                 $users->setPrenom('prenoms'.$i);
+                
                 $users->setLogin('login'.$i);
                 $plainTextPassword = 'password'.$i;
                 $hashedPassword = $this->encoder->hashPassword($users, $plainTextPassword);

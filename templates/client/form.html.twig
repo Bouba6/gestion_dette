@@ -35,10 +35,12 @@
         </svg>
         <div class="md:w-800 sm:w-xgg mx-auto p-6 border-t-black shadow-md border-2 rounded-md m-6">
 
-            {{ form_start(formClient , { 'attr': {'id': 'clientForm'} }) }}
+            {{ form_start(formClient , { 'attr': {'id': 'clientForm','enctype': 'multipart/form-data'} }) }}
             {{ form_row(formClient.telephone,{ 'attr': {'id': 'telephone' } }) }}
             {{ form_row(formClient.surname, { 'attr': {'id': 'surname'} } )}}
             {{ form_row(formClient.adresse, { 'attr': {'id': 'adresse'} }) }}
+
+
 
             <label class="switch">
                 <input type="checkbox" id="toggleSwitch" name="toggleSwitch" {% if app.request.get('toggleSwitch')=='on'
@@ -58,11 +60,57 @@
                     </svg>
                     <p class="text-xl">Ajouter un compte utilisateur</p>
                 </div>
+                {% for error in formClient.users.vars.errors %}
+                <div class="error">{{ error.message }}</div>
+                {% endfor %}
 
-                {{ form_row(formUser.nom) }}
-                {{ form_row(formUser.prenom) }}
-                {{ form_row(formUser.login) }}
-                {{ form_row(formUser.password) }}
+                {{ form_row(formClient.users.nom) }}
+                {% if error is defined %}
+                {% for error in error %}
+                {% if error.propertyPath == 'nom' %}
+                <div class="error">{{ error.message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                {{ form_row(formClient.users.prenom) }}
+                {% if error is defined %}
+                {% for error in error %}
+                {% if error.propertyPath == 'prenom' %}
+                <div class="error">{{ error.message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+
+                {{ form_row(formClient.users.login) }}
+                {% if error is defined %}
+                {% for error in error %}
+                {% if error.propertyPath == 'login' %}
+                <div class="error">{{ error.message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                {{ form_row(formClient.users.password) }}
+                {% if error is defined %}
+                {% for error in error %}
+                {% if error.propertyPath == 'password' %}
+                <div class="error">{{ error.message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                {{ form_row(formClient.users.brochure) }}
+                {% if error is defined %}
+                {% for error in error %}
+                {% if error.propertyPath == 'brochure' %}
+                <div class="error">{{ error.message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+
 
             </div>
 

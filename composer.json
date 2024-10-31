@@ -7,6 +7,7 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "composer/composer": "^2.0",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
@@ -78,6 +79,7 @@
         "prepare": [
             "php bin/console doctrine:database:drop --force --if-exists",
             "php bin/console doctrine:database:create",
+            "php bin/console make:migration",
             "php bin/console doctrine:migrations:migrate -n"
         ],
         "auto-scripts": {

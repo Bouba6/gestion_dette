@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+{% endblock %}
+{% block aside %}
+{% endblock %}
+{% block body %}
+<div class="flex items-center  justify-center mt-16 w-auto h-full">
+    <div class="flex flex-row justify-between border-2 w-full rounded-2xl bg-gray-900 p-10">
+        <div class="w-96">
+            <img src="{{ asset('img/homme.png') }}" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class=" rounded-lg shadow-lg w-800 p-6">
+            <h1 class="text-2xl font-semibold text-center  mb-4 text-white ">Please Sign In</h1>
+
+            {% if error %}
+            <div class="bg-red-100 text-red-600 border border-red-300 rounded-md p-2 mb-4">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+            {% endif %}
+
+            {% if app.user %}
+            <div class="text-center mb-3 ">
+                You are logged in as <strong>{{ app.user.userIdentifier }}</strong>, <a href="{{ path('app_logout') }}"
+                    class="text-blue-500">Logout</a>
+            </div>
+            {% endif %}
+            <!-- value="{{ last_username }}" -->
+            <form method="post">
+                <div class="mb-4">
+                    <label for="inputLogin" class="block text-white">Login</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-3 top-2 text-2xl text-gray-900"></i>
+                        <input type="text" placeholder="Entrer votre login" name="login" id="inputLogin"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 pl-10"
+                            autocomplete="username" required autofocus>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="inputPassword" class="block text-white">Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-2 text-2xl text-gray-900"></i>
+                        <input type="password" placeholder="Entrer votre password" name="password" id="inputPassword"
+                            class="mt-1 block bg-red-800 w-full pr-10 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 pl-10"
+                            autocomplete="current-password" required>
+                    </div>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button
+                    class="w-full bg-blue-600 mt-9 text-white rounded-md py-2 hover:bg-blue-700 transition duration-300"
+                    type="submit">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="#" class="text-blue-500 hover:underline">Forgot your password?</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

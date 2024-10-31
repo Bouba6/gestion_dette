@@ -14,7 +14,7 @@ module.exports = {
       },
       width: {
         'xgg': '1000px',
-        '800': '800px'
+        '800': '600px'
       },
       colors: {
         'bro': '#ff49db',
