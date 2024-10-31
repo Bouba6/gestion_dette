@@ -22,6 +22,7 @@ class Client
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank(message: "Le numéro de téléphone ne peut pas être vide.")]
     #[Assert\Length(max: 100, maxMessage: "Le numéro de téléphone ne peut pas dépasser {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: '/^(77|78|76)([0-9]{7})$/', message: "Le numéro de téléphone doit être au format 77/78/76 XXXXXXX")]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 100)]
